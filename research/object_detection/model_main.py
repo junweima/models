@@ -60,6 +60,7 @@ def main(unused_argv):
       pipeline_config_path=FLAGS.pipeline_config_path,
       train_steps=FLAGS.num_train_steps,
       eval_steps=FLAGS.num_eval_steps)
+
   estimator = train_and_eval_dict['estimator']
   train_input_fn = train_and_eval_dict['train_input_fn']
   eval_input_fn = train_and_eval_dict['eval_input_fn']

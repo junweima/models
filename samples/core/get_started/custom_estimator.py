@@ -96,6 +96,10 @@ def main(argv):
         input_fn=lambda:iris_data.train_input_fn(train_x, train_y, args.batch_size),
         steps=args.train_steps)
 
+    print('\n\n')
+    print(classifier.model_dir)
+    print('\n\n')
+
     # Evaluate the model.
     eval_result = classifier.evaluate(
         input_fn=lambda:iris_data.eval_input_fn(test_x, test_y, args.batch_size))

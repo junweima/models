@@ -46,6 +46,8 @@ flags.DEFINE_boolean(
 )
 flags.DEFINE_boolean('eval_training_data', False,
                      'If training data should be evaluated for this job.')
+flags.DEFINE_boolean('continue_train', False,
+                    'continue training')
 FLAGS = flags.FLAGS
 
 
@@ -69,7 +71,10 @@ def main(unused_argv):
   train_steps = train_and_eval_dict['train_steps']
   eval_steps = train_and_eval_dict['eval_steps']
 
-  if FLAGS.checkpoint_dir:
+  print('\n continue train is {} \n'.format(FLAGS.continue_train))
+
+  if FLAGS.checkpoint_dir and not FLAGS.continue_train:
+    print('\n running evaluation \n')
     if FLAGS.eval_training_data:
       name = 'training_data'
       input_fn = eval_on_train_input_fn
@@ -85,6 +90,7 @@ def main(unused_argv):
       model_lib.continuous_eval(estimator, FLAGS.model_dir, input_fn,
                                 eval_steps, train_steps, name)
   else:
+    print('\n running training \n')
     train_spec, eval_specs = model_lib.create_train_and_eval_specs(
         train_input_fn,
         eval_input_fn,
@@ -94,6 +100,7 @@ def main(unused_argv):
         eval_steps,
         eval_on_train_data=False)
 
+    # import pdb; pdb.set_trace()
     # Currently only a single Eval Spec is allowed.
     tf.estimator.train_and_evaluate(estimator, train_spec, eval_specs[0])
 
